@@ -7,9 +7,10 @@ using AOC2023.Framework;
 
 namespace AOC2023.Days
 {
+    [AoC(2023, 1)]
     internal class Day1 : AoCDay
     {
-        public Day1(string inputFilePath = "", string testFilePath = "") : base(1, inputFilePath, testFilePath)
+        public Day1(string inputFilePath = "", string testFilePath = "") : base(inputFilePath, testFilePath)
         {
         }
 

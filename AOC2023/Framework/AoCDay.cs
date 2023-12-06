@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -13,21 +14,26 @@ namespace AOC2023.Framework
 {
     internal abstract class AoCDay
     {
-        private int year = 2023;
-        private int day;
-        private string input;
-        private string test;
+        private readonly int year = 2023;
+        private readonly int day;
+        private readonly string input;
+        private readonly string test;
 
-        public AoCDay(int dayNumber, string inputFilePath = "", string testFilePath = "")
+        public AoCDay(string inputFilePath = "", string testFilePath = "")
         {
-            this.day = dayNumber;
-            
-            if(inputFilePath != "") { 
+            AoCAttribute? myAtt = (AoCAttribute?)Attribute.GetCustomAttribute(this.GetType(), typeof(AoCAttribute));
+            if (myAtt == null) 
+                throw new InvalidOperationException("AoC attribute missing");
+
+            this.day = myAtt.Day;
+            this.year= myAtt.Year;
+
+            if (inputFilePath != "") { 
                 this.input = inputFilePath;
             }
             else
             {
-                this.input = $"Inputs/Day{dayNumber}.txt";
+                this.input = $"Inputs/Day{day}.txt";
             }
 
             if (testFilePath != "")
@@ -36,7 +42,7 @@ namespace AOC2023.Framework
             }
             else
             {
-                this.test = $"Inputs/Day{dayNumber}Test.txt";
+                this.test = $"Inputs/Day{day}Test.txt";
             }
         }
 
@@ -53,8 +59,15 @@ namespace AOC2023.Framework
             }
             string[] file = File.ReadAllLines(this.input);
 
-            Console.WriteLine("Part one : " + PartOne(ref file));
-            Console.WriteLine("Part two : " + PartTwo(ref file));
+            var watch = Stopwatch.StartNew();
+            string sResult = PartOne(ref file);
+            watch.Stop();
+            Console.WriteLine($"Part one : {sResult}".PadRight(60) + $"{watch.ElapsedMilliseconds}ms");
+
+            watch = Stopwatch.StartNew();
+            sResult = PartTwo(ref file);
+            watch.Stop();
+            Console.WriteLine($"Part two : {sResult}".PadRight(60) + $"{watch.ElapsedMilliseconds}ms");
         }
 
         public void Test()
@@ -105,7 +118,7 @@ namespace AOC2023.Framework
             }
         }
 
-        private string ReadSESSION()
+        private static string ReadSESSION()
         {
             return File.ReadAllText("SESSION.config");
         }
