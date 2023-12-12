@@ -13,7 +13,7 @@ namespace AOC2023.Days
             long[] distances = file[1].Split(":")[1].Split(" ", StringSplitOptions.RemoveEmptyEntries).Select(x => long.Parse(x)).ToArray();
             for (int i=0; i<times.Length; i++)
             {
-                var roots = quadraticRoot(-1, times[i], -distances[i]);
+                var roots = QuadraticRoot(-1, times[i], -distances[i]);
                 nSum *= roots.Item2 - roots.Item1 + 1;
             }
             return nSum.ToString(); //1312850
@@ -28,7 +28,7 @@ namespace AOC2023.Days
             return PartOne(ref file); //36749103
         }
 
-        private (long, long) quadraticRoot(long a, long b, long c)
+        private static (long, long) QuadraticRoot(long a, long b, long c)
         {
             long delta = (long)Math.Pow(b, 2) - 4 * a * c;
 

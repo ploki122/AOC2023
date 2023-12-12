@@ -75,8 +75,15 @@ namespace AOC2023.Framework
             Console.WriteLine(Environment.NewLine + $"Test Day {day}");
             string[] file = File.ReadAllLines(test);
 
-            Console.WriteLine("Part one : " + PartOne(ref file));
-            Console.WriteLine("Part two : " + PartTwo(ref file));
+            var watch = Stopwatch.StartNew();
+            string sResult = PartOne(ref file);
+            watch.Stop();
+            Console.WriteLine($"Part one : {sResult}".PadRight(60) + $"{watch.ElapsedMilliseconds}ms");
+
+            watch = Stopwatch.StartNew();
+            sResult = PartTwo(ref file);
+            watch.Stop();
+            Console.WriteLine($"Part two : {sResult}".PadRight(60) + $"{watch.ElapsedMilliseconds}ms");
         }
 
         protected abstract string PartOne(ref string[] file);
@@ -99,6 +106,7 @@ namespace AOC2023.Framework
 
             // Add the session cookie
             client.DefaultRequestHeaders.Add("Cookie", $"session={sSESSION}");
+            client.DefaultRequestHeaders.Add("User-Agent", $"u/ploki122's C# Framework");
             using HttpResponseMessage response = client.GetAsync($"https://adventofcode.com/{year}/day/{day}/input").Result;
 
             if (response.IsSuccessStatusCode)

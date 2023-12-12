@@ -17,7 +17,7 @@ namespace AOC2023.Days
         protected override string PartOne(ref string[] file)
         {
             int sum = 0;
-            Dictionary<string, int> keyList = new Dictionary<string, int>
+            Dictionary<string, int> keyList = new()
             {
                 ["1"] = 1,
                 ["2"] = 2,
@@ -61,7 +61,7 @@ namespace AOC2023.Days
         protected override string PartTwo(ref string[] file)
         {
             int sum = 0;
-            Dictionary<string, int> keyList = new Dictionary<string, int>
+            Dictionary<string, int> keyList = new()
             {
                 ["1"] = 1,
                 ["2"] = 2,

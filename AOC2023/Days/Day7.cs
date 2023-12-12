@@ -23,7 +23,6 @@ namespace AOC2023.Days
             long nSum = 0;
             for (int handNo = 0; handNo < file.Length; handNo++)
             {
-                Console.WriteLine($"{handNo + 1} {file[handNo]}");
                 nSum += (handNo + 1) * int.Parse(file[handNo].Split(" ")[1]);
             }
 
