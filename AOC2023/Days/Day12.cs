@@ -5,7 +5,7 @@ namespace AOC2023.Days
     [AoC(2023, 12)]
     internal class Day12 : AoCDay
     {
-        private static readonly short DEBUG_LEVEL = 99;
+        private static readonly short DEBUG_LEVEL = 0;
         private static readonly List<string> EXPECTED_RESULTS = new() { "22", " 2", " 8", " 8", "11", " 1", " 2", " 5", "23", " 4", " 3", " 3", " 1", " 2", "28", "20", " 5", "20", "52", " 6", " 6", "40", " 7", " 6", " 8", " 4", " 6", " 1", " 6", " 3", " 1", " 2", " 3", " 1", " 4", " 2", " 3", " 3", " 6", " 4", " 3", " 1", " 2", " 6", " 4", " 4", "11", " 8", " 2", " 2", " 9", " 8", "13", " 5", "16", " 5", " 5", " 4", " 2", " 6", " 2", " 2", " 18", " 3", " 3", " 9", " 6", "18", " 2", " 1", " 6", " 4", "10", " 4", " 5", "10", " 9", " 7", " 6", " 2", " 5", "19", " 2", "45"};
         protected override string PartOne(ref string[] file)
         {
