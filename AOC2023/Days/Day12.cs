@@ -5,8 +5,9 @@ namespace AOC2023.Days
     [AoC(2023, 12)]
     internal class Day12 : AoCDay
     {
-        private static readonly short DEBUG_LEVEL = 0;
-        private static readonly List<string> EXPECTED_RESULTS = new() { "22", " 2", " 8", " 8", "11", " 1", " 2", " 5", "23", " 4", " 3", " 3", " 1", " 2", "28", "20", " 5", "20", "52", " 6", " 6", "40", " 7", " 6", " 8", " 4", " 6", " 1", " 6", " 3", " 1", " 2", " 3", " 1", " 4", " 2", " 3", " 3", " 6", " 4", " 3", " 1", " 2", " 6", " 4", " 4", "11", " 8", " 2", " 2", " 9", " 8", "13", " 5", "16", " 5", " 5", " 4", " 2", " 6", " 2", " 2", " 18", " 3", " 3", " 9", " 6", "18", " 2", " 1", " 6", " 4", "10", " 4", " 5", "10", " 9", " 7", " 6", " 2", " 5", "19", " 2", "45"};
+        private static readonly short DEBUG_LEVEL = 99;
+        private static readonly List<string> EXPECTED_RESULTS = new() { "22", " 2", " 8", " 8", "11", " 1", " 2", " 5", "23", " 4", " 3", " 3", " 1", " 2", "28", "20", " 5", "20", "52", " 6", " 6", "40", " 7", " 6", " 8", " 4", " 6", " 1", " 6", " 3", " 1", " 2", " 3", " 1", " 4", " 2", " 3", " 3", " 6", " 4", " 3", " 1", " 2", " 6", " 4", " 4", "11", " 8", " 2", " 2", " 9", " 8", "13", " 5", "16", " 5", " 5", " 4", " 2", " 6", " 2", " 2", "18", " 3", " 3", " 9", " 6", "18", " 2", " 1", " 6", " 4", "10", " 4", " 5", "10", " 9", " 7", " 6", " 2", " 5", "19", " 2", "45", " 7", "10", " 9", " 3", "28", " 1", " 6", "21", " 2", " 7", " 4", "21", " 1", "11", " 8", "16", " 1", " 2", " 2", " 6", "48", "28", " 2", " 7", " 1", " 7", " 3", " 4", " 3", " 2", "24", " 1", " 3", " 9", " 4", " 1", " 1", " 2", " 3", " 5", " 1"};
+        
         protected override string PartOne(ref string[] file)
         {
             long nSum = 0;
@@ -23,17 +24,30 @@ namespace AOC2023.Days
                 n++;
             }
 
-            return nSum.ToString(); //7794 too high
-                                    //7280 too high
-                                    //5053
-                                    //6995
-                                    //7216
+            return nSum.ToString(); //7204
         }
 
         protected override string PartTwo(ref string[] file)
         {
+            long nSum = 0;
+            int n = 0;
+            foreach (var line in file)
+            {
+                string day = line.Split(" ")[0].Trim('.'); //Trim functional days at the beginning and end, to make things simpler.
+                day = day + day + day + day + day;
+                List<int> blocks = line.Split(" ")[1].Split(",").Select(x => int.Parse(x)).ToList();
+                blocks.AddRange(blocks);
+                blocks.AddRange(blocks);
+                blocks.AddRange(line.Split(" ")[1].Split(",").Select(x => int.Parse(x)).ToList());
 
-            return "0"; //36749103
+                var res = Nonosolve(day, blocks);
+                nSum += res;
+
+                if (DEBUG_LEVEL >= 0) Console.WriteLine($"{(EXPECTED_RESULTS.Count > n ? EXPECTED_RESULTS[n] : "??")} {res}=>{line}");
+                n++;
+            }
+
+            return nSum.ToString(); //7204
         }
 
         private static long Nonosolve(string line, List<int> blocks, int nLevel = 1)
@@ -147,16 +161,21 @@ namespace AOC2023.Days
             //Shortcut : Based on total length and holes and stuff, it's nonogram
             if (nLeeway == 0 || blocks.Count == 0)
             {
-                if (DEBUG_LEVEL >= nLevel) Console.WriteLine($"{new string(' ', 2*nLevel)}1 = {line} {String.Join(",", blocks)}");
-                int nStart = 0;
+                //build the minimal string to represent the blocks, with an extra dot since I can't be arsed.
+                string comparison = "";
                 foreach(var testBlock in blocks)
                 {
-                    if (line[nStart..(nStart+testBlock)].Contains('.')) //if a segment would contain ., kill it.
-                        return 0;
-                    else if (nStart + testBlock < line.Length && line[nStart + testBlock] == '#') //we'd strip a #, kill it.
-                        return 0;
+                    comparison += new string('#', testBlock) + ".";
+                }
+                comparison = (comparison + new string('.', line.Length))[..line.Length];
 
-                    nStart += testBlock + 1;
+                //Compare if there are ./# overlaps
+                for (int i=0; i<line.Length; i++)
+                {
+                    if ((line[i]=='.' && comparison[i]=='#') || (line[i] == '#' && comparison[i] == '.'))
+                    {
+                        return 0;
+                    }
                 }
                 
                 return 1;
